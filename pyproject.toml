@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "adventofcode"
+version = "1.0.0"
+description = "Solutions for adventofcode, mostly written in the python language"
+authors = ["oryon-dominik <oryon@cyberise.de>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
