@@ -25,10 +25,12 @@
             "*.py": "python"
         },
         //python///////////////////////////////////////////////////////////////
+        "python.analysis.extraPaths": ["2020", "2019", "2018", "2017", "2016", "2015"],
         // black-settings
         "python.formatting.provider": "black",
         "python.formatting.blackArgs": ["--line-length", "119"],
 
+        
         //launcher-config//////////////////////////////////////////////////////
         "launch": {
                 "version": "0.2.0",

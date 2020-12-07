@@ -6,6 +6,7 @@ authors = ["oryon-dominik <oryon@cyberise.de>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+parse = "^1.18.0"
 
 [tool.poetry.dev-dependencies]
 

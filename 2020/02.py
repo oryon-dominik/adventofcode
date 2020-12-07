@@ -1,7 +1,5 @@
-import functools
-import time
-from pathlib import Path
 import re
+
 from puzzle_handler import AdventPuzzleHandler
 
 class PasswordPhilosophy(AdventPuzzleHandler):
@@ -13,12 +11,13 @@ class PasswordPhilosophy(AdventPuzzleHandler):
         }
     puzzle_day = 2
     clean_data = False
+    SPLIT_AT = '-| |: '
 
     def count_solution(self) -> int:
         """we just split and count"""
         matches = 0
         for expression in self.data:
-            m, n, char, password = re.split('-| |: ', expression)
+            m, n, char, password = re.split(self.SPLIT_AT, expression)
             if int(m) <= password.count(char) <= int(n):
                 matches += 1
         return matches
@@ -27,7 +26,7 @@ class PasswordPhilosophy(AdventPuzzleHandler):
         """compile the pattern with regex (suitable for more complex patterns too)"""
         matches = 0
         for expression in self.data:
-            m, n, char, password = re.split('-| |: ', expression)
+            m, n, char, password = re.split(self.SPLIT_AT, expression)
             # TODO: fix the pattern below to match more complex patterns, e.g: [^{char}] (NOT the char)
             # pattern = re.compile(fr"({char}){{{m},{n}}}")
             # if pattern.match(password):
@@ -39,7 +38,7 @@ class PasswordPhilosophy(AdventPuzzleHandler):
         """this solution is sloppy due to the lack of time"""
         matches = 0
         for expression in self.data:
-            m, n, char, password = re.split('-| |: ', expression)
+            m, n, char, password = re.split(self.SPLIT_AT, expression)
             try:
                 position_one = password[int(m) - 1]
                 position_two = password[int(n) - 1]

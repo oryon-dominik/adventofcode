@@ -1,5 +1,6 @@
-from puzzle_handler import AdventPuzzleHandler
 import math
+
+from puzzle_handler import AdventPuzzleHandler
 
 
 class TobogganTrajectory(AdventPuzzleHandler):
