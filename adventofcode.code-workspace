@@ -1,0 +1,48 @@
+{
+    "folders": [
+        {
+            "name": "adventofcode",
+            "path": "."
+        },
+    ],
+    "extensions": {
+    },
+    "settings": {
+        //files////////////////////////////////////////////////////////////////
+        "files.autoSave": "onFocusChange",
+        "files.eol": "\n",
+        "files.exclude": {
+            "**/__pycache__": true,
+            "**/_pytest": true,
+            "**/*.egg-info": true,
+            "**/*.dist-info": true,
+            "**/.pytest_cache": true,
+            "**/.ipynb_checkpoints/": true,
+            "**/.ipython": true,
+        },
+        "files.associations": {
+            "**/*.html": "html",
+            "*.py": "python"
+        },
+        //python///////////////////////////////////////////////////////////////
+        // black-settings
+        "python.formatting.provider": "black",
+        "python.formatting.blackArgs": ["--line-length", "119"],
+
+        //launcher-config//////////////////////////////////////////////////////
+        "launch": {
+                "version": "0.2.0",
+                "configurations": [
+                    {
+                        "name": "Python: Current File, integrated Terminal",
+                        "type": "python",
+                        "request": "launch",
+                        "program": "${file}",
+                        "cwd": "${fileDirname}",
+                        "console": "integratedTerminal",
+                        // "stopOnEntry": true,  // vscode-debugging mode
+                    },
+                ]
+            },
+    }
+}

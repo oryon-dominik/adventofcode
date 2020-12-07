@@ -1,0 +1,9 @@
+## GIT is ignoring...
+
+# jupyter
+.ipynb_checkpoints/
+
+### Python ###
+# precompiled
+__pycache__/
+*.py[cod]
