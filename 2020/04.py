@@ -71,8 +71,15 @@ class PassportProcessing(ReadFileAsPureFileMixin, AdventPuzzleHandler):
 
         # verify - Eye Color
         # exactly one of: `amb` `blu` `brn` `gry` `grn` `hzl` `oth`.
-        ecl = re.compile(r"ecl\:(amb|blu|brn|gry|grn|hzl|oth)").findall(passport)
-        if ecl == []:
+        amb = parse.search("ecl:amb", passport)
+        blu = parse.search("ecl:blu", passport)
+        brn = parse.search("ecl:brn", passport)
+        gry = parse.search("ecl:gry", passport)
+        grn = parse.search("ecl:grn", passport)
+        hzl = parse.search("ecl:hzl", passport)
+        oth = parse.search("ecl:oth", passport)
+        
+        if not any([amb, blu, brn, gry, grn, hzl, oth]):
             return False
 
         # verify - Passport ID
@@ -185,3 +192,4 @@ print("This is not the correct solution for part 4 yet, I'm missing something in
 
 process_passport = PassportProcessing(approach="strict validation parse", timeit=True)
 print(f"{process_passport.text} | Task2 - process passports PARSE: {process_passport.result} - {process_passport.time}")
+print("This is the correct solution! :-)")
