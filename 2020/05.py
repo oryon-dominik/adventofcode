@@ -1,12 +1,12 @@
 from puzzle_handler import AdventPuzzleHandler, ReadFileAsPureFileMixin
 
 
-class BinaryBoarding(ReadFileAsPureFileMixin, AdventPuzzleHandler):
+class BinaryBoarding(AdventPuzzleHandler):
 
     puzzle_day = 5
     clean_data = False
     approaches = {
-        'find seat': {"func": "seat_passengers", "datatype": str},
+        'find seat': {"func": "seat_passengers", "datatype": list},
     }
 
     def seat_passengers(self):
