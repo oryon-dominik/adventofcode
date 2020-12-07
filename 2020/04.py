@@ -9,9 +9,7 @@ class PassportProcessing(ReadFileAsPureFileMixin, AdventPuzzleHandler):
     # uncomment these filesnames for test-data:
     # filename = "04_test_success.data"
     # filename = "04_test_fail.data"
-    pids = []
     puzzle_day = 4
-    clean_data = False
     approaches = {
         'automatic passport scanner': {"func": "process_passport", "datatype": str},
         'strict validation regex': {"func": "process_passport", "datatype": str},
