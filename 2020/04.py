@@ -143,7 +143,7 @@ class PassportProcessing(ReadFileAsPureFileMixin, AdventPuzzleHandler):
 
         # verify - Passport ID
         # a nine-digit number, including leading zeroes.
-        pid = re.compile(r"pid\:\d{9}").findall(passport)
+        pid = re.compile(r"pid\:\d{9}(\D|$)").findall(passport)
         if pid == []:
             return False
 
