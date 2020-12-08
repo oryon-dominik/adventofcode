@@ -21,7 +21,8 @@ class BinaryBoarding(AdventPuzzleHandler):
         shape=(len(self.rows_in_the_plane), len(self.seats_in_a_row)),
         fill_value=np.nan,
         dtype=np.float64,
-    )
+        )
+        self.seat_ids = []
 
     def binary_find_seat(self, boarding_pass_instructions):
         instructions = boarding_pass_instructions
@@ -32,25 +33,34 @@ class BinaryBoarding(AdventPuzzleHandler):
         calculus = int(instructions, 2)
         return calculus
 
+    def get_seat_id(self, row, col):
+        return row * 8 + col
+
+    def neighbors_exist(self, seat):
+        _id = self.get_seat_id(seat[0], seat[1])
+        return _id + 1 in self.seat_ids and _id - 1 in self.seat_ids
+
     def get_your_seat_id(self):
         error = "The Aircraft should be empty at start"
         assert np.count_nonzero(np.isnan(self.airplane)) == self.seats_in_the_plane, error
         self.seat_passengers()
-        free_seats = np.count_nonzero(np.isnan(self.airplane))
-        print(f'>>> DEBUG: {free_seats}')
-        # TODO: remove the first and last rows
+        # empty_seats_count
+        # np.count_nonzero(np.isnan(self.airplane))
+        free_seats = np.argwhere(np.isnan(self.airplane))
+        seat = [seat for seat in free_seats if self.neighbors_exist(seat)]
+        row, col = seat[0]
+        return self.get_seat_id(row, col)
 
     def seat_passengers(self):
-        seat_ids = []
         for seat in self.data:
             boarding_pass_row = seat[:7]
             row_of_this_seat = self.binary_find_seat(boarding_pass_row)
             boarding_pass_col = seat[7:]
             seat_in_the_row = self.binary_find_seat(boarding_pass_col)
-            seat_id = row_of_this_seat * 8 + seat_in_the_row
-            seat_ids.append(seat_id)
+            seat_id = self.get_seat_id(row_of_this_seat, seat_in_the_row)
+            self.seat_ids.append(seat_id)
             self.airplane[row_of_this_seat, seat_in_the_row] = seat_id
-        return max(seat_ids)
+        return max(self.seat_ids)
 
 boarding = BinaryBoarding(approach="prepare aircraft", timeit=True)
 print(f"{boarding.text} | Task1 - find your seat: {boarding.result} - {boarding.time}")
