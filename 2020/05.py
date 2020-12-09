@@ -1,6 +1,5 @@
-import math
 import numpy as np
-from puzzle_handler import AdventPuzzleHandler, ReadFileAsPureFileMixin
+from puzzle_handler import AdventPuzzleHandler
 
 
 class BinaryBoarding(AdventPuzzleHandler):
