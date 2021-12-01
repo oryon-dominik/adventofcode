@@ -1,15 +1,11 @@
-import logging
-from puzzle_handler import AdventPuzzleHandler
-
-
-log = logging.getLogger('Advent of Code Day 1')
+from puzzle_handler import AdventPuzzle
+from log import log
 
 
 """These are dirty and hacky solutions but they work.. have to think it through more elegantly..."""
 
 
-class SonarSweep(AdventPuzzleHandler):
-
+class SonarSweep(AdventPuzzle):
     approaches = {
             'previous': {"func": "compare_to_previous", "datatype": list},
             'window': {"func": "compare_window", "datatype": list},
@@ -17,7 +13,7 @@ class SonarSweep(AdventPuzzleHandler):
     puzzle_day = 1
     clean_data = True
 
-    def clean_data(self, data):
+    def clean(self, data):
         return [int(d) for d in data]
 
     def compare_to_previous(self):
@@ -49,8 +45,6 @@ class SonarSweep(AdventPuzzleHandler):
                 pass
         return increasing
 
-
-logging.basicConfig(level=logging.INFO, format='{levelname}: {message}', style='{')
 
 ssweep = SonarSweep(approach='previous', timeit=True)
 log.info(f"{ssweep.text} | Task1 - Compare to previous: {ssweep.result} - {ssweep.time}")
