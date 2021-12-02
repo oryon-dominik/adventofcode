@@ -16,9 +16,8 @@ class SonarSweep(AdventPuzzle):
     def clean(self, data):
         return [int(d) for d in data]
 
-    def compare_to_previous(self):
+    def compare_to_previous(self, increasing = 0):
         """How many measurements are larger than the previous measurement?"""
-        increasing = 0
         for measurement, depth in enumerate(self.data):
             try:
                 if self.data[measurement] > self.data[measurement - 1]:
@@ -28,16 +27,14 @@ class SonarSweep(AdventPuzzle):
                 pass
         return increasing
 
-    def compare_window(self, window_depth=3):
+    def compare_window(self, window = 3, increasing = 0):
         """How many sums are larger than the previous sum?"""
-        wd = window_depth
-        increasing = 0
         for measurement, depth in enumerate(self.data):
             m = measurement
             n = m + 1
             try:
-                this_ = sum(self.data[m : m + wd])
-                next_ = sum(self.data[n: n + wd])
+                this_ = sum(self.data[m : m + window])
+                next_ = sum(self.data[n: n + window])
                 log.debug(f"depth={depth} this_window={this_} next_window={next_} increasing={next_ - this_}")
                 if this_ < next_:
                     increasing += 1
