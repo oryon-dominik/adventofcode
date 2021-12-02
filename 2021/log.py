@@ -4,7 +4,7 @@ from rich.logging import RichHandler
 
 logging.basicConfig(
     level=logging.INFO,
-    format='{levelname}: {message}',
+    format='{message}',
     style='{', handlers=[RichHandler(
         rich_tracebacks = True,
         show_time = False,
