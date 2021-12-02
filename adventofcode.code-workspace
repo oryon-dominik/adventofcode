@@ -25,7 +25,7 @@
             "*.py": "python"
         },
         //python///////////////////////////////////////////////////////////////
-        "python.analysis.extraPaths": ["2020", "2019", "2018", "2017", "2016", "2015"],
+        "python.analysis.extraPaths": ["2021", "2020", "2019", "2018", "2017", "2016", "2015"],
         // black-settings
         "python.formatting.provider": "black",
         "python.formatting.blackArgs": ["--line-length", "119"],
