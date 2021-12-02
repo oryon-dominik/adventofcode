@@ -24,7 +24,7 @@ class AdventPuzzle:
     puzzle_day = None
     approaches = None
     clean_data = False
-    convert_datatype = True
+    convert_datatype = False
     filename = None
 
     def __init__(self, approach: str, timeit: bool = False, file_handler: Union[FileRaw, FileAsList] = FileAsList()):
@@ -82,6 +82,9 @@ class AdventPuzzle:
     def _path_from_filename(self, filename: str) -> Path:
         """Return the path to the file."""
         path = Path(filename)
+        if not any([c in filename for c in ('/', '\\')]):
+            parent = Path(__file__).parent
+            path = parent / filename
         assert path.exists(), f"File {path.resolve()} not Found"
         return path
 
