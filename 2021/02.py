@@ -1,7 +1,6 @@
 from puzzle_handler import AdventPuzzle
 from log import log
 from typing import NamedTuple
-from rich import print
 
 
 class Instruction(NamedTuple):
