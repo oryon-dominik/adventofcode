@@ -26,7 +26,8 @@ class AdventPuzzle:
     approaches = None
     clean_data = False
     convert_datatype = False
-    filename = None
+    filen_ame = None
+    enforce_tests = False
 
     def __init__(self, approach: str, timeit: bool = False, file_handler: Union[FileRaw, FileAsList] = FileAsList()):
         # the approaches we may use
@@ -119,7 +120,8 @@ class AdventPuzzle:
     def tests(self, results):
         """Run the tests for the puzzle."""
         # -> assert some conditions that should be met.
-        # raise NotImplementedError("You should implement a method `tests(self, results)` to run the tests for the puzzle.")
+        if self.enforce_tests:
+            raise NotImplementedError("You should implement a method `tests(self, results)` to run the tests for the puzzle if 'enforce_tests' is True.")
         return True
 
     def run_tests(self, results, error = None):
