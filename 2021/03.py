@@ -39,7 +39,7 @@ class BinaryDiagnostic(AdventPuzzle):
         for column in range(self.get_minimum_data_length()):
             most_common_bit = self.get_most_common_bit(transposed_data=self.transpose_list(data), column=column, reverse=True)
             data = self.filter_list_for_bits(data, bit=most_common_bit, column=column)
-        assert len(data) == 1, "There should only be one row left"
+        assert len(data) == 1, f"There should only be one row left. Got: {data}"
         return data[0]
 
     def calculate_co2_scrubber_rating(self):
@@ -47,7 +47,7 @@ class BinaryDiagnostic(AdventPuzzle):
         for column in range(self.get_minimum_data_length()):
             least_common_bit = self.get_least_common_bit(transposed_data=self.transpose_list(data), column=column, reverse=False)
             data = self.filter_list_for_bits(data, bit=least_common_bit, column=column)
-        assert len(data) == 1, "There should only be one row left"
+        assert len(data) == 1, f"There should only be one row left. Got: {data}"
         return data[0]
 
     def calculate_gamma(self) -> str:
@@ -69,7 +69,7 @@ class BinaryDiagnostic(AdventPuzzle):
         return [row for row in data if bit in row[column]]
 
     def get_minimum_data_length(self, data=None):
-        """Get the minimal lenght of the rows"""
+        """Get the minimal length of the rows."""
         if data is None:
             data = self.data
         lengths = [len(d) for d in data]
