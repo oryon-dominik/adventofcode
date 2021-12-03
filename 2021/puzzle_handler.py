@@ -1,6 +1,7 @@
 import functools
 import time
 import datetime
+import types
 from pathlib import Path
 from typing import Union
 from log import log
@@ -26,7 +27,7 @@ class AdventPuzzle:
     approaches = None
     clean_data = False
     convert_datatype = False
-    filen_ame = None
+    filename = None
     enforce_tests = False
 
     def __init__(self, approach: str, timeit: bool = False, file_handler: Union[FileRaw, FileAsList] = FileAsList()):
@@ -117,21 +118,32 @@ class AdventPuzzle:
             assert type(cleaned_data) == self.approaches.get(self.approach, {})["datatype"], f"Datatype of the result is not the expected one. Expected: {self.approaches.get(self.approach, {})['datatype']}, got: {type(cleaned_data)}."
         return cleaned_data
 
-    def tests(self, results):
-        """Run the tests for the puzzle."""
-        # -> assert some conditions that should be met.
-        if self.enforce_tests:
-            raise NotImplementedError("You should implement a method `tests(self, results)` to run the tests for the puzzle if 'enforce_tests' is True.")
-        return True
+    def tests(self, *args, **kwargs) -> bool:
+        """
+        Run the tests for the puzzle.
 
-    def run_tests(self, results, error = None):
+        -> assert some conditions that should be met.
+
+        example:
+
+            def tests(self, results):
+                assert type(results) is int, f"The result of the function is not an integer. Got: {type(results)}"
+
+        """
+        pass
+
+    def run_tests(self, results):
         """Run the tests for the puzzle."""
-        passed = False
+        own_methods = [name for name, item in type(self).__dict__.items() if isinstance(item, types.FunctionType)]
+        if self.enforce_tests and not 'tests' in own_methods:
+            try:
+                raise NotImplementedError(f"You should implement a method `tests` to run the tests for the puzzle if 'enforce_tests' is True.\n{self.tests.__doc__}")
+            except NotImplementedError as e:
+                log.error(e)
         try:
             passed = self.tests(results=results)
-        except AssertionError as e:
-            error = e
-        if not passed:
+            assert passed is None, f"Passing tests should not return anything. Got: {passed}"
+        except AssertionError as error:
             log.error(f"Tests for puzzle {self.text} failed: {error}")
         return results
 
