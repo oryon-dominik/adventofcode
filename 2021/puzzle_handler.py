@@ -3,6 +3,7 @@ import time
 import datetime
 from pathlib import Path
 from typing import Union
+from log import log
 
 
 class FileRaw:
@@ -115,9 +116,21 @@ class AdventPuzzle:
             assert type(cleaned_data) == self.approaches.get(self.approach, {})["datatype"], f"Datatype of the result is not the expected one. Expected: {self.approaches.get(self.approach, {})['datatype']}, got: {type(cleaned_data)}."
         return cleaned_data
 
-    def run_tests(self, results):
+    def tests(self, results):
         """Run the tests for the puzzle."""
-        # -> assert some condition that should be met.
+        # -> assert some conditions that should be met.
+        # raise NotImplementedError("You should implement a method `tests(self, results)` to run the tests for the puzzle.")
+        return True
+
+    def run_tests(self, results, error = None):
+        """Run the tests for the puzzle."""
+        passed = False
+        try:
+            passed = self.tests(results=results)
+        except AssertionError as e:
+            error = e
+        if not passed:
+            log.error(f"Tests for puzzle {self.text} failed: {error}")
         return results
 
     @property
