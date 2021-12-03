@@ -144,7 +144,7 @@ class AdventPuzzle:
             passed = self.tests(results=results)
             assert passed is None, f"Passing tests should not return anything. Got: {passed}"
         except AssertionError as error:
-            log.error(f"Tests for puzzle {self.text} failed: {error}")
+            log.error(f"Tests for puzzle: '{self.text}' using approach '{self.approach}' failed: '{error if error is not None else 'Assertion Text missing'}'")
         return results
 
     @property
