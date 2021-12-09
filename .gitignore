@@ -13,3 +13,6 @@ __pycache__/
 
 # secrets
 .github.env
+
+# rust build files
+target/
