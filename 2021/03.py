@@ -126,10 +126,12 @@ class BinaryDiagnostic(AdventPuzzle):
             gamma += common_bit
         assert gamma == "10110"
         assert type(results) is int, "Results should be an integer"
-        
-        # tests that assure ties are handled correctly
-        transposed = self.transpose_list(['0', '1'])
+
+        # test lists are transposable
+        original_list = ['0', '1']
+        transposed = self.transpose_list(original_list)
         assert transposed == [['0', '1']]
+        # tests that assure ties are handled correctly
         # most common bit
         most_common = self.get_most_common_bit(transposed_data=transposed, column=0)
         assert most_common == "1", f"Most common should be 1. Is {most_common}"
