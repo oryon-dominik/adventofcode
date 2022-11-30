@@ -23,8 +23,8 @@ class Puzzle:
         day: int,
         approach: str,
         *args,
-        timeit: bool = False,
-        read_file_as: Literal['raw', 'lines'] = 'raw',
+        timeit: bool = True,
+        read_file_as: Literal['raw', 'lines'] = 'lines',
         **kwargs,
     ):
         # Setup
@@ -87,7 +87,7 @@ class Puzzle:
             data = self.clean(data)
         return data
 
-    def tests(self, results, *args, **kwargs) -> None:
+    def tests(self, results: Any, *args, **kwargs) -> None:
         """
         Run the tests for the puzzle.
 
