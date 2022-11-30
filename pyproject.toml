@@ -1,17 +1,17 @@
 [tool.poetry]
 name = "adventofcode"
-version = "1.0.0"
+version = "1.22.0"
 description = "Solutions for adventofcode, mostly written in the python language"
 authors = ["oryon-dominik <oryon@cyberise.de>"]
 
 [tool.poetry.dependencies]
-python = "^3.10.1"
-parse = "^1.18.0"
-numpy = "^1.19.4"
-httpx = "^0.21.1"
-rich = "^10.15.1"
-fastapi = "^0.70.0"
-python-dotenv = "^0.19.2"
+python = "^3.11.0"
+rich = "^12.6.0"
+parse = "^1.19.0"
+httpx = "^0.23.1"
+fastapi = "^0.88.0"
+python-dotenv = "^0.21.0"
+numpy = "^1.23.5"
 
 [tool.poetry.dev-dependencies]
 jupyter = "^1.0.0"
