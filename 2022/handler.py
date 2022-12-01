@@ -2,11 +2,14 @@ import functools
 import time
 import datetime
 import types
+import tracemalloc
 from pathlib import Path
 
 from typing import Literal, Any, Callable
 from logs import log
 from inout import read
+
+import humanize
 
 
 YEAR = 2022
@@ -33,6 +36,7 @@ class Puzzle:
         self.timeit = timeit
         self.read_file_as = read_file_as
         self.execution_time = None
+        self.consumed_memory = None
 
         # The different approaches to the solutions we may use.
         self.approach = approach
@@ -131,6 +135,13 @@ class Puzzle:
             return "Did not time the execution of the last method call."
         return f"Execution time: {self.execution_time :0.4f} seconds."
 
+    @property
+    def memory(self) -> str:
+        """Return a str of the execution time of the last run."""
+        if self.consumed_memory is None:
+            return "Did not calculate the memory consumption of the last method call."
+        return f"Consumed memory: {self.consumed_memory}."
+
     @staticmethod
     def timer(func):
         """Decorator to time the execution of a function."""
@@ -142,9 +153,13 @@ class Puzzle:
                 return func(self, *args, **kwargs)
             # Time it. Execute. Return.
             time_start = time.perf_counter()
+            # Memory usage
+            tracemalloc.start()
             value = func(self, *args, **kwargs)
             time_end = time.perf_counter()
             self.execution_time = time_end - time_start
+            self.consumed_memory = humanize.naturalsize(tracemalloc.get_traced_memory()[-1])
+            tracemalloc.stop()
             return value
         return wrapper
 

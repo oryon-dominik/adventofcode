@@ -304,6 +304,17 @@ http2 = ["h2 (>=3,<5)"]
 socks = ["socksio (>=1.0.0,<2.0.0)"]
 
 [[package]]
+name = "humanize"
+version = "4.4.0"
+description = "Python humanize utilities"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+tests = ["freezegun", "pytest", "pytest-cov"]
+
+[[package]]
 name = "idna"
 version = "3.4"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -1240,7 +1251,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.11.0"
-content-hash = "b3ac2921ea1f5d07e011833567dc09d7659443dbce0a94d6146f0d6dfc7ce762"
+content-hash = "0bc9e65faa4b86a6913972ec96214a728fc186c2a6fae55148dab59b95bdb4d0"
 
 [metadata.files]
 anyio = []
@@ -1268,6 +1279,7 @@ greenlet = []
 h11 = []
 httpcore = []
 httpx = []
+humanize = []
 idna = []
 ipykernel = []
 ipython = []

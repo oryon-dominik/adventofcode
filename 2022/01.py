@@ -19,7 +19,7 @@ class CalorieCountingAdvent(Puzzle):
 
 
 done = CalorieCountingAdvent(approach='total_calories', day=1, read_file_as='raw')
-log.info(f"{done.text} | {done.approach.capitalize()}: {done.result} - {done.time}")
+log.info(f"{done.text} | {done.approach.capitalize()}: {done.result} | {done.time} | {done.memory}")
 
 done = CalorieCountingAdvent(approach='top_three_total_calories', day=1, read_file_as='raw')
-log.info(f"{done.text} | {done.approach.capitalize()}: {done.result} - {done.time}")
+log.info(f"{done.text} | {done.approach.capitalize()}: {done.result} | {done.time} | {done.memory}")
