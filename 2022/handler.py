@@ -137,7 +137,7 @@ class Puzzle:
 
     @property
     def memory(self) -> str:
-        """Return a str of the execution time of the last run."""
+        """Return a str of the memory consumption of the last run."""
         if self.consumed_memory is None:
             return "Did not calculate the memory consumption of the last method call."
         return f"Consumed memory: {self.consumed_memory}."
