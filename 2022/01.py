@@ -6,7 +6,6 @@ from logs import log
 
 
 class CalorieCountingAdvent(Puzzle):
-    puzzle_day = 1
     clean_data = True
 
     def clean(self, data: str):
