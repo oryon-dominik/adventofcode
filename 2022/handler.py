@@ -50,7 +50,7 @@ class Puzzle:
 
         returns (example):
             approaches = {
-                'approach name': {"func": self.the_function_to_call, "datatype": list},
+                'approach name': {"func": func},
             }
         """
         validated = {}
@@ -68,7 +68,7 @@ class Puzzle:
                 validated.update({f"{approach}": func})
 
         except AssertionError as e:
-            message = "Implement valid approaches for the handler to work: approaches = {'approach name': {'func': 'functionname', Optional['datatype': list|set]} }"
+            message = "Implement valid approaches for the handler to work: approaches = {'approach name': {'func': func} }"
             message += f"{message} - {e}"
             raise NotImplementedError(message)
 
