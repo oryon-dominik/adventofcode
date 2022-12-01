@@ -1,22 +1,20 @@
-from handler import Puzzle
-from logs import log
+from handler import Puzzle, approach
 
 
-"""These are dirty and hacky solutions but they work.. have to think it through more elegantly..."""
-
-
-class CalorieCountingAdvent(Puzzle):
+class CalorieCounting(Puzzle):
     clean_data = True
 
     def clean(self, data: str):
         return data.split('\n\n')
 
+    @approach
     def total_calories(self):
         return max([sum(int(e) for e in elf.split('\n')) for elf in self.data])
 
+    @approach
     def top_three_total_calories(self):
         return sum(sorted([sum(int(e) for e in elf.split('\n')) for elf in self.data])[-3:])
 
 
-CalorieCountingAdvent(approach='total_calories', day=1, read_file_as='raw').info()
-CalorieCountingAdvent(approach='top_three_total_calories', day=1, read_file_as='raw').info()
+CalorieCounting(day=1, read='raw').info()
+

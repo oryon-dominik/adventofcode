@@ -3,6 +3,7 @@ import time
 import datetime
 import types
 import tracemalloc
+import inspect
 from pathlib import Path
 
 from typing import Literal, Any, Callable
@@ -15,8 +16,19 @@ import humanize
 YEAR = 2022
 
 
+def approach(func):
+    """
+    Decorator to add approaches to the handler. Literally just does nothing
+    but adding the @approach to the source code :P
+    """
+    @functools.wraps(func)
+    def wrapper(self, *args, **kwargs):
+        value = func(self, *args, **kwargs)
+        return value
+    return wrapper
+
+
 class Puzzle:
-    approaches = None
     clean_data = False
     filename = None
     enforce_tests = False
@@ -24,23 +36,21 @@ class Puzzle:
     def __init__(
         self,
         day: int,
-        approach: str,
         *args,
         timeit: bool = True,
-        read_file_as: Literal['raw', 'lines'] = 'lines',
+        read: Literal['raw', 'lines'] = 'lines',
         **kwargs,
     ):
         # Setup
         self.date = datetime.date(year=YEAR, month=12, day=day)
         self.text = f"Advent of Code, Day {self.date.day}, {self.__class__.__name__}"
         self.timeit = timeit
-        self.read_file_as = read_file_as
+        self.read = read
         self.execution_time = None
         self.consumed_memory = None
 
-        # The different approaches to the solutions we may use.
-        self.approach = approach
-        self.approaches = self._validate_approaches(self.approaches)
+        self.approaches = self._validate_approaches()
+
         self.args = [arg for arg in args]
         self.kwargs = {k: v for k,v in kwargs.items()}
         self.data = self._read_convert_and_clean_data()
@@ -48,7 +58,15 @@ class Puzzle:
     def clean(self, data):
         raise NotImplementedError("You should implement a method `clean(self, data)` to clean your data, or set the `clean_data` property to False.")
 
-    def _validate_approaches(self, approaches: dict | None) -> dict:  # pyright: ignore
+    @classmethod
+    def _approaches(cls) -> list:
+        """The approaches to the puzzle are decorated functions."""
+        source = inspect.getsourcelines(cls)
+        locs = [source[0][i + 1] for i, value in enumerate(source[0]) if "@approach" in value]
+        decorated = [loc.strip().split('(')[0].removeprefix('def ') for loc in locs]
+        return decorated
+
+    def _validate_approaches(self) -> dict:  # pyright: ignore
         """
         Validate the approaches dict.
 
@@ -59,9 +77,8 @@ class Puzzle:
         """
         validated = {}
         try:
-            assert self.approach, f"You should provide a valid approach ({self.approach=})."
 
-            approaches: dict = {f"{self.approach}": getattr(self, self.approach)} if approaches is None and hasattr(self, self.approach) else {}
+            approaches: dict = {f"{approach}": getattr(self, approach) for approach in self.__class__._approaches()}
 
             for approach, func in approaches.items():
                 # Get the function to call
@@ -75,7 +92,6 @@ class Puzzle:
             message = "Implement valid approaches for the handler to work: approaches = {'approach name': {'func': func} }"
             message += f"{message} - {e}"
             raise NotImplementedError(message)
-
         return validated
 
     def _path_from_filename(self, filename: str) -> Path:
@@ -85,7 +101,7 @@ class Puzzle:
     def _read_convert_and_clean_data(self) -> list | set | str:
         """Read the data and convert it to the expected data_type (list, set or str)."""
         filename = self.filename if self.filename is not None else f"{self.date.day:02d}.data"
-        data: list | str | set = read(path=self._path_from_filename(filename=filename), method=self.read_file_as)
+        data: list | str | set = read(path=self._path_from_filename(filename=filename), method=self.read)
 
         if self.clean_data:
             data = self.clean(data)
@@ -105,7 +121,7 @@ class Puzzle:
         """
         ...
 
-    def run_tests(self, results):
+    def run_tests(self, results, approach: str):
         """Run the tests for the puzzle."""
         own_methods = [name for name, item in type(self).__dict__.items() if isinstance(item, types.FunctionType)]
         if self.enforce_tests and 'tests' not in own_methods:
@@ -117,19 +133,19 @@ class Puzzle:
             passed = self.tests(results=results)
             assert passed is None, f"Passing tests should not return anything. Got: {passed}"
         except AssertionError as error:
-            log.error(f"Tests for puzzle: '{self.text}' using approach '{self.approach}' failed: '{error if error is not None else 'Assertion Text missing'}'")
+            log.error(f"Tests for puzzle: '{self.text}' using approach '{approach}' failed: '{error if error is not None else 'Assertion Text missing'}'")
         return results
 
-    @property
-    def result(self) -> Any:
+    def result(self, approach: str, func: Callable) -> Any:
         """
         Used as a convenience property for neater access.
         Usally, we can directly return the result.
         """
-        return self.run_tests(self._calc_results_from_approaches(approach=self.approach, approaches=self.approaches, *self.args, **self.kwargs))
+        return self.run_tests(results=self._calc_results(func, *self.args, **self.kwargs), approach=approach)
 
     def info(self):
-        log.info(f"{self.text} | {self.approach.capitalize()}: {self.result} | {self.time} | {self.memory}")
+        for approach, func in self.approaches.items():
+            log.info(f"{self.text} | {approach.capitalize()}: {self.result(approach, func)} | {self.time} | {self.memory}")
 
     @property
     def time(self) -> str:
@@ -167,10 +183,6 @@ class Puzzle:
         return wrapper
 
     @timer
-    def _calc_results_from_approaches(self, approach, approaches, *args, **kwargs) -> Any:
+    def _calc_results(self, run: Callable, *args, **kwargs) -> Any:
         """Unpack the function from apporaches und call it."""
-        assert approach in approaches, f"Not Found: {approach} is not a valid approach."
-        run: Callable = approaches.get(approach)
-        if run is None:
-            raise NotImplementedError(f"Function for approach '{approach}' not found.")
         return run()
