@@ -128,6 +128,9 @@ class Puzzle:
         """
         return self.run_tests(self._calc_results_from_approaches(approach=self.approach, approaches=self.approaches, *self.args, **self.kwargs))
 
+    def info(self):
+        log.info(f"{self.text} | {self.approach.capitalize()}: {self.result} | {self.time} | {self.memory}")
+
     @property
     def time(self) -> str:
         """Return a str of the execution time of the last run."""
