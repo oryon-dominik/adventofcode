@@ -16,3 +16,19 @@ The solutions are not complete, due to lack of time ;-)
 Some puzzles are solved kinda sloppy. Maybe you can see progress over time though.  
 
 Enjoy.
+
+
+## Python
+
+Install dependencies with poetry (`poetry install`) and run inside the year's
+directory and the virtual environment (`poetry shell`) -> `python <day>.py`.
+
+## Rust
+
+Add a new `bin` entry for every day.
+
+    [[bin]]
+    name = "2022-day1"
+    path = "2022/01.rs"
+
+Install dependencies with `cargo install --path .`. Run with `cargo run --bin 2022-day1`.

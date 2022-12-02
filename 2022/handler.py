@@ -143,9 +143,12 @@ class Puzzle:
         """
         return self.run_tests(results=self._calc_results(func, *self.args, **self.kwargs), approach=approach)
 
+    def _camelize(self, approach: str) -> str:
+        return "".join(word.capitalize() for word in approach.split('_'))
+
     def info(self):
         for approach, func in self.approaches.items():
-            log.info(f"{self.text} | {approach.capitalize()}: {self.result(approach, func)} | {self.time} | {self.memory}")
+            log.info(f"{self.text} | {self._camelize(approach)}: {self.result(approach, func)} | {self.time} | {self.memory}")
 
     @property
     def time(self) -> str:
