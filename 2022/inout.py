@@ -2,11 +2,11 @@ import io
 from pathlib import Path
 
 
-def read(path: Path, method: str = "raw") -> str | list | set:
+def read(path: Path, method: str = "raw", mode: str = "r") -> str | list | set:
     """Read data from file_path and return lines as raw string or list of strings."""
     if not path.exists():
         raise FileNotFoundError(f"File {path.resolve()} not found.")
-    with open(path, "r") as file:
+    with open(path, mode) as file:
         match method:
             case "raw":
                 content = _raw(file)

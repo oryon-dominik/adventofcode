@@ -1,4 +1,4 @@
-from handler import Puzzle, approach
+from handler import Puzzle, approach, monitor
 from functools import cache
 
 
@@ -80,4 +80,7 @@ class RockPaperScissors(Puzzle):
         return score
 
 
-RockPaperScissors(day=2).info()
+
+if __name__ == '__main__':
+    advent = RockPaperScissors(day=2)
+    advent.info()

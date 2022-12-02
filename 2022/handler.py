@@ -9,14 +9,21 @@ from pathlib import Path
 from typing import Literal, Any, Callable
 from logs import log
 from inout import read
+from typing import NamedTuple
 
 import humanize
+
+
+class ExecutionStats(NamedTuple):
+    name: str
+    time: float
+    memory: str
 
 
 YEAR = 2022
 
 
-def approach(func):
+def approach(func: Callable):
     """
     Decorator to add approaches to the handler. Literally just does nothing
     but adding the @approach to the source code :P
@@ -24,6 +31,30 @@ def approach(func):
     @functools.wraps(func)
     def wrapper(self, *args, **kwargs):
         value = func(self, *args, **kwargs)
+        return value
+    return wrapper
+
+
+def monitor(func: Callable):
+    """Decorator to add monitoring stats to the execution of a function."""
+    @functools.wraps(func)
+    def wrapper(self, *args, **kwargs):
+        if not self.timeit:
+            # Don't time the execution, just return the result
+            return func(self, *args, **kwargs)
+        # Time it. Execute. Return.
+        time_start = time.perf_counter()
+        # Memory usage
+        tracemalloc.start()
+        value = func(self, *args, **kwargs)
+        time_end = time.perf_counter()
+        execution_time = time_end - time_start
+        self.statistics.insert(0, ExecutionStats(
+            name=func.__name__,
+            time=execution_time,
+            memory=humanize.naturalsize(tracemalloc.get_traced_memory()[-1]))
+        )
+        tracemalloc.stop()
         return value
     return wrapper
 
@@ -39,6 +70,7 @@ class Puzzle:
         *args,
         timeit: bool = True,
         read: Literal['raw', 'lines'] = 'lines',
+        mode: Literal['r', 'rb'] = 'r',
         **kwargs,
     ):
         # Setup
@@ -46,8 +78,8 @@ class Puzzle:
         self.text = f"Advent of Code, Day {self.date.day}, {self.__class__.__name__}"
         self.timeit = timeit
         self.read = read
-        self.execution_time = None
-        self.consumed_memory = None
+        self.mode = mode
+        self.statistics = []
 
         self.approaches = self._validate_approaches()
 
@@ -86,7 +118,7 @@ class Puzzle:
                     assert hasattr(self, str(func.__name__)), f"Function for '{approach=}' not found."
 
                 # Build the validated dict
-                validated.update({f"{approach}": func})
+                validated.update({f"{approach}": {"func": func, "statistics": []}})
 
         except AssertionError as e:
             message = "Implement valid approaches for the handler to work: approaches = {'approach name': {'func': func} }"
@@ -97,15 +129,6 @@ class Puzzle:
     def _path_from_filename(self, filename: str) -> Path:
         """Return the path to the file."""
         return Path(__file__).parent / filename if not any([c in filename for c in ('/', '\\')]) else Path(filename)
-
-    def _read_convert_and_clean_data(self) -> list | set | str:
-        """Read the data and convert it to the expected data_type (list, set or str)."""
-        filename = self.filename if self.filename is not None else f"{self.date.day:02d}.data"
-        data: list | str | set = read(path=self._path_from_filename(filename=filename), method=self.read)
-
-        if self.clean_data:
-            data = self.clean(data)
-        return data
 
     def tests(self, results: Any, *args, **kwargs) -> None:
         """
@@ -147,45 +170,33 @@ class Puzzle:
         return "".join(word.capitalize() for word in approach.split('_'))
 
     def info(self):
-        for approach, func in self.approaches.items():
-            log.info(f"{self.text} | {self._camelize(approach)}: {self.result(approach, func)} | {self.time} | {self.memory}")
+        for approach, values in self.approaches.items():
+            log.info(f"{self.text} | {self._camelize(approach)}: {self.result(approach, values['func'])} | {self.stats}")
 
     @property
-    def time(self) -> str:
-        """Return a str of the execution time of the last run."""
-        if self.execution_time is None:
-            return "Did not time the execution of the last method call."
-        return f"Execution time: {self.execution_time :0.4f} seconds."
+    def stats(self) -> str:
+        """Return a str of the execution stats of the last run."""
+        additional_monitors = [stat for stat in self.statistics if stat.name != '_calc_results']
+        self.statistics = [stat for stat in self.statistics if stat.name == '_calc_results']
+        if self.statistics == [] and additional_monitors == []:
+            return "Did not time statistics of the last method calls."
+        adds = ''.join(f"\nExecution time for '{am.name}': {am.time :0.4f} seconds. | Consumed memory: {am.memory}." for am in additional_monitors)
+        if self.statistics == [] and additional_monitors != []:
+            return adds
+        et = self.statistics.pop()
+        return f"Execution time{f' for {et.name}' if not et.name.startswith('_')else ' for results'}: {et.time :0.4f} seconds. | Consumed memory: {et.memory}.{adds}"
 
-    @property
-    def memory(self) -> str:
-        """Return a str of the memory consumption of the last run."""
-        if self.consumed_memory is None:
-            return "Did not calculate the memory consumption of the last method call."
-        return f"Consumed memory: {self.consumed_memory}."
+    @monitor
+    def _read_convert_and_clean_data(self) -> list | set | str:
+        """Read the data and convert it to the expected data_type (list, set or str)."""
+        filename = self.filename if self.filename is not None else f"{self.date.day:02d}.data"
+        data: list | str | set = read(path=self._path_from_filename(filename=filename), method=self.read, mode=self.mode)
 
-    @staticmethod
-    def timer(func):
-        """Decorator to time the execution of a function."""
-        @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):
-            self.execution_time = None
-            if not self.timeit:
-                # Don't time the execution, just return the result
-                return func(self, *args, **kwargs)
-            # Time it. Execute. Return.
-            time_start = time.perf_counter()
-            # Memory usage
-            tracemalloc.start()
-            value = func(self, *args, **kwargs)
-            time_end = time.perf_counter()
-            self.execution_time = time_end - time_start
-            self.consumed_memory = humanize.naturalsize(tracemalloc.get_traced_memory()[-1])
-            tracemalloc.stop()
-            return value
-        return wrapper
+        if self.clean_data:
+            data = self.clean(data)
+        return data
 
-    @timer
+    @monitor
     def _calc_results(self, run: Callable, *args, **kwargs) -> Any:
         """Unpack the function from apporaches und call it."""
-        return run()
+        return run(*args, **kwargs)
