@@ -57,7 +57,6 @@ class RockPaperScissors(Puzzle):
     def points(self, hand: str, outcome: str) -> int:
         return self.points_for_hand().get(hand, 0) + self.points_for_results().get(outcome, 0)
 
-
     @approach
     def first_winning_score(self):
         score = 0
