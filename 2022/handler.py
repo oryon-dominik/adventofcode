@@ -186,7 +186,6 @@ class Puzzle:
         et = self.statistics.pop()
         return f"Execution time{f' for {et.name}' if not et.name.startswith('_')else ' for results'}: {et.time :0.4f} seconds. | Consumed memory: {et.memory}.{adds}"
 
-    @monitor
     def _read_convert_and_clean_data(self) -> list | set | str:
         """Read the data and convert it to the expected data_type (list, set or str)."""
         filename = self.filename if self.filename is not None else f"{self.date.day:02d}.data"
