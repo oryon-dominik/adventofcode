@@ -13,6 +13,7 @@ fastapi = "^0.88.0"
 python-dotenv = "^0.21.0"
 numpy = "^1.23.5"
 humanize = "^4.4.0"
+more-itertools = "^9.0.0"
 
 [tool.poetry.dev-dependencies]
 jupyter = "^1.0.0"

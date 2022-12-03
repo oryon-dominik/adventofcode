@@ -601,6 +601,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "more-itertools"
+version = "9.0.0"
+description = "More routines for operating on iterables, beyond itertools"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "nbclassic"
 version = "0.4.8"
 description = "A web-based notebook environment for interactive computing"
@@ -1251,7 +1259,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.11.0"
-content-hash = "0bc9e65faa4b86a6913972ec96214a728fc186c2a6fae55148dab59b95bdb4d0"
+content-hash = "7b9e4e21c1420149924363885f13c92ed298c7bfb660f72927ecb4a9946e1209"
 
 [metadata.files]
 anyio = []
@@ -1298,6 +1306,7 @@ jupyterlab-widgets = []
 markupsafe = []
 matplotlib-inline = []
 mistune = []
+more-itertools = []
 nbclassic = []
 nbclient = []
 nbconvert = []
