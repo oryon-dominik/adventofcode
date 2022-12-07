@@ -5,6 +5,7 @@ import types
 import tracemalloc
 import inspect
 from pathlib import Path
+from copy import deepcopy
 
 from typing import Literal, Any, Callable
 from logs import log
@@ -165,6 +166,11 @@ class Puzzle:
         Usally, we can directly return the result.
         """
         return self.run_tests(results=self._calc_results(func, *self.args, **self.kwargs), approach=approach)
+
+    @property
+    def datacopy(self):
+        """Return a copy of the puzzles data."""
+        return deepcopy(self.data)
 
     def _camelize(self, approach: str) -> str:
         return "".join(word.capitalize() for word in approach.split('_'))

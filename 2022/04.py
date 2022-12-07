@@ -1,8 +1,3 @@
-import string
-import itertools
-
-import more_itertools as mit
-
 from handler import Puzzle, approach
 
 
