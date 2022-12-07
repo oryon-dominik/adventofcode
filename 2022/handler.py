@@ -172,6 +172,12 @@ class Puzzle:
         """Return a copy of the puzzles data."""
         return deepcopy(self.data)
 
+    def data_reread_changes(self) -> bool:
+        """Reread the data and return True if the data has changed."""
+        copied = self.datacopy
+        self.data = self._read_convert_and_clean_data()
+        return self.data != copied
+
     def _camelize(self, approach: str) -> str:
         return "".join(word.capitalize() for word in approach.split('_'))
 
