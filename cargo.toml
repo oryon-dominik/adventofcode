@@ -6,5 +6,9 @@ edition = "2021"
 [dependencies]
 
 [[bin]]
-name = "day1"
+name = "2021-day1"
 path = "2021/01.rs"
+
+[[bin]]
+name = "2022-day1"
+path = "2022/01.rs"
