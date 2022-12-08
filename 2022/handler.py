@@ -4,6 +4,7 @@ import datetime
 import types
 import tracemalloc
 import inspect
+import sys
 from pathlib import Path
 from copy import deepcopy
 
@@ -177,6 +178,17 @@ class Puzzle:
         copied = self.datacopy
         self.data = self._read_convert_and_clean_data()
         return self.data != copied
+
+    def adjust_recursion_limit(self, recommended: int = 1_750, reset=False, recursion_cache={}):
+        """
+        Adjust the recursion limit to the maximum possible.
+        """
+        if recursion_cache.get('current') is None:
+            recursion_cache['current'] = sys.getrecursionlimit()  # usally 1000
+        if not reset:
+            sys.setrecursionlimit(recommended)
+        else:
+            sys.setrecursionlimit(recursion_cache['current'])
 
     def _camelize(self, approach: str) -> str:
         return "".join(word.capitalize() for word in approach.split('_'))
