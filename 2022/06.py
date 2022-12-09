@@ -1,6 +1,6 @@
 import sys
 
-from handler import Puzzle, approach
+from handler import Puzzle, approach, recursionlimit
 
 
 MARKER_LENGTH = 4
@@ -26,10 +26,9 @@ class TuningTrouble(Puzzle):
             return string
         return self.reduce_till_finding_unique_marker(string=string[offset:], length=length)
 
-    def find_marker(self, data: str, length: int, recursion_depth: int = 2_000) -> str:
-        self.adjust_recursion_limit(recommended=recursion_depth)
+    @recursionlimit(depth=3_850)
+    def find_marker(self, data: str, length: int) -> str:
         string = self.reduce_till_finding_unique_marker(string=data, length=length)
-        self.adjust_recursion_limit(reset=True)
         return data.removesuffix(string)
 
     @approach
@@ -41,7 +40,7 @@ class TuningTrouble(Puzzle):
     @approach
     def detect_message_marker_start(self) -> int:
         self.datacopy: str
-        result = self.find_marker(data=self.datacopy, length=MESSAGE_MARKER_LENGTH, recursion_depth=5000)
+        result = self.find_marker(data=self.datacopy, length=MESSAGE_MARKER_LENGTH)
         return len(result) + MESSAGE_MARKER_LENGTH
 
 

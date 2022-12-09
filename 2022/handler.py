@@ -25,6 +25,33 @@ class ExecutionStats(NamedTuple):
 YEAR = 2022
 
 
+def recursionlimit(depth: int, verbose: bool = True):
+    def _adjust_recursion_limit(depth: int = 1_000, reset=False, recursion_cache={}):
+        """
+        Adjust the recursion limit to the maximum possible.
+        """
+        if recursion_cache.get('current') is None:
+            recursion_cache['current'] = sys.getrecursionlimit()  # usally 1000
+        if not reset:
+            sys.setrecursionlimit(depth)
+        else:
+            sys.setrecursionlimit(recursion_cache['current'])
+
+    def decorator(func: Callable):
+        """
+        Decorator to adjust the recursion limit to depth provided.
+        """
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            _adjust_recursion_limit(depth=depth)
+            value = func(*args, **kwargs)
+            _adjust_recursion_limit(reset=True)
+            return value
+        return wrapper
+    if verbose:
+        log.warn('Adjusting the recursionlimit may impose the risk of a stack overflow/segfault!')
+    return decorator
+
 def approach(func: Callable):
     """
     Decorator to add approaches to the handler. Literally just does nothing
@@ -35,7 +62,6 @@ def approach(func: Callable):
         value = func(self, *args, **kwargs)
         return value
     return wrapper
-
 
 def monitor(func: Callable):
     """Decorator to add monitoring stats to the execution of a function."""
@@ -178,17 +204,6 @@ class Puzzle:
         copied = self.datacopy
         self.data = self._read_convert_and_clean_data()
         return self.data != copied
-
-    def adjust_recursion_limit(self, recommended: int = 1_750, reset=False, recursion_cache={}):
-        """
-        Adjust the recursion limit to the maximum possible.
-        """
-        if recursion_cache.get('current') is None:
-            recursion_cache['current'] = sys.getrecursionlimit()  # usally 1000
-        if not reset:
-            sys.setrecursionlimit(recommended)
-        else:
-            sys.setrecursionlimit(recursion_cache['current'])
 
     def _camelize(self, approach: str) -> str:
         return "".join(word.capitalize() for word in approach.split('_'))
