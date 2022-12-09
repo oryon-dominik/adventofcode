@@ -1,19 +1,21 @@
-import functools
-import time
 import datetime
-import types
-import tracemalloc
+import functools
 import inspect
 import sys
-from pathlib import Path
+import time
+import tracemalloc
+import types
 from copy import deepcopy
-
-from typing import Literal, Any, Callable
-from logs import log
-from inout import read
-from typing import NamedTuple
+from pathlib import Path
+from typing import Any, Callable, Literal, NamedTuple
 
 import humanize
+
+SCRIPT_DIR = Path(__file__).parent
+sys.path.append(str(SCRIPT_DIR))
+
+from inout import read
+from logs import log
 
 
 class ExecutionStats(NamedTuple):

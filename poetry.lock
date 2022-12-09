@@ -72,7 +72,7 @@ test = ["astroid", "pytest"]
 name = "attrs"
 version = "22.1.0"
 description = "Classes Without Boilerplate"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5"
 
@@ -144,7 +144,7 @@ pycparser = "*"
 name = "colorama"
 version = "0.4.6"
 description = "Cross-platform colored terminal text."
-category = "dev"
+category = "main"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 
@@ -323,6 +323,14 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "iniconfig"
+version = "1.1.1"
+description = "iniconfig: brain-dead simple config-ini parsing"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "ipykernel"
 version = "6.18.3"
 description = "IPython Kernel for Jupyter"
@@ -409,6 +417,20 @@ widgetsnbextension = ">=4.0,<5.0"
 
 [package.extras]
 test = ["jsonschema", "pytest (>=3.6.0)", "pytest-cov", "pytz"]
+
+[[package]]
+name = "isort"
+version = "5.10.1"
+description = "A Python utility / library to sort Python imports."
+category = "main"
+optional = false
+python-versions = ">=3.6.1,<4.0"
+
+[package.extras]
+pipfile_deprecated_finder = ["pipreqs", "requirementslib"]
+requirements_deprecated_finder = ["pipreqs", "pip-api"]
+colors = ["colorama (>=0.4.3,<0.5.0)"]
+plugins = ["setuptools"]
 
 [[package]]
 name = "jedi"
@@ -775,7 +797,7 @@ python-versions = ">=3.8"
 name = "packaging"
 version = "21.3"
 description = "Core utilities for Python packages"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -852,6 +874,18 @@ python-versions = ">=3.7"
 [package.dependencies]
 greenlet = "2.0.1"
 pyee = "9.0.4"
+
+[[package]]
+name = "pluggy"
+version = "1.0.0"
+description = "plugin and hook calling mechanisms for python"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+dev = ["pre-commit", "tox"]
+testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "prometheus-client"
@@ -962,7 +996,7 @@ plugins = ["importlib-metadata"]
 name = "pyparsing"
 version = "3.0.9"
 description = "pyparsing module - Classes and methods to define and execute parsing grammars"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6.8"
 
@@ -976,6 +1010,36 @@ description = "Persistent/Functional/Immutable data structures"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
+
+[[package]]
+name = "pytest"
+version = "7.2.0"
+description = "pytest: simple powerful testing with Python"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+attrs = ">=19.2.0"
+colorama = {version = "*", markers = "sys_platform == \"win32\""}
+iniconfig = "*"
+packaging = "*"
+pluggy = ">=0.12,<2.0"
+
+[package.extras]
+testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
+
+[[package]]
+name = "pytest-rich"
+version = "0.1.1"
+description = "Leverage rich for richer test session output"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+pytest = ">=7.0"
+rich = "*"
 
 [[package]]
 name = "python-dateutil"
@@ -1259,7 +1323,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.11.0"
-content-hash = "7b9e4e21c1420149924363885f13c92ed298c7bfb660f72927ecb4a9946e1209"
+content-hash = "8237ddc97a6935185da6191df8f84ea48d7d334982b0ee879e6c33b262bc87a5"
 
 [metadata.files]
 anyio = []
@@ -1289,10 +1353,12 @@ httpcore = []
 httpx = []
 humanize = []
 idna = []
+iniconfig = []
 ipykernel = []
 ipython = []
 ipython-genutils = []
 ipywidgets = []
+isort = []
 jedi = []
 jinja2 = []
 jsonschema = []
@@ -1323,6 +1389,7 @@ pexpect = []
 pickleshare = []
 platformdirs = []
 playwright = []
+pluggy = []
 prometheus-client = []
 prompt-toolkit = []
 psutil = []
@@ -1335,6 +1402,8 @@ pyee = []
 pygments = []
 pyparsing = []
 pyrsistent = []
+pytest = []
+pytest-rich = []
 python-dateutil = []
 python-dotenv = []
 pywin32 = []
