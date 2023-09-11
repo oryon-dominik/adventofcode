@@ -7,6 +7,11 @@ fn main() {
         .expect("Something went wrong reading the file");
 
     let elves: Vec<&str> = file.split("\n\n").collect();
+    let weights: Vec<&str> = elves.into_iter().filter(
+        (comp![e.parse::<i32>().unwrap(); for e in e.split("\n")]).sum()
+    ).collect();
 
+    println!("weights: {:?}", weights);
+    // println!("Result: {}", increasing);
 
 }

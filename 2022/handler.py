@@ -50,8 +50,10 @@ def recursionlimit(depth: int, verbose: bool = True):
             _adjust_recursion_limit(reset=True)
             return value
         return wrapper
+    
     if verbose:
         log.warn('Adjusting the recursionlimit may impose the risk of a stack overflow/segfault!')
+    
     return decorator
 
 def approach(func: Callable):
@@ -61,7 +63,9 @@ def approach(func: Callable):
     """
     @functools.wraps(func)
     def wrapper(self, *args, **kwargs):
+        ... # before
         value = func(self, *args, **kwargs)
+        ... # after
         return value
     return wrapper
 
